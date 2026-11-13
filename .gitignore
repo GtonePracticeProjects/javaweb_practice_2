@@ -1,0 +1,8 @@
+backend/target/
+frontend/node_modules/
+# `npm run build` output (copied into Spring Boot's static folder)
+backend/src/main/resources/static/
+.idea/
+.vscode/
+*.iml
+*.log

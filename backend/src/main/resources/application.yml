@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: bank-backend
+  datasource:
+    url: ${DB_URL:jdbc:mariadb://localhost:3306/bankdb}
+    username: ${DB_USER:bank}
+    password: ${DB_PASSWORD:bankpw}
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    open-in-view: false            # keep persistence context inside the service layer
+    hibernate:
+      # Example project: let Hibernate create/update tables.
+      # In a real bank use Flyway/Liquibase + "validate".
+      ddl-auto: ${DDL_AUTO:update}
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100   # avoids N+1 on lazy collections
+        jdbc.batch_size: 50
+        order_inserts: true
+        order_updates: true
+  jackson:
+    default-property-inclusion: non_null
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace   # shows bind parameters (dev only!)
+
+bank:
+  seed:
+    enabled: ${SEED_ENABLED:true}        # creates admin / demo users on first start
+  transfer:
+    daily-limit: 10000000                # per-account daily outgoing transfer limit
+  jwt:
+    # HS256 needs >= 32 bytes. CHANGE THIS and load it from a secret store in real life.
+    secret: ${JWT_SECRET:dev-only-secret-dev-only-secret-dev-only-secret}
+    expires-minutes: 30
+  security:
+    max-login-failures: 5
+    dormant-days: 365

@@ -1,0 +1,19 @@
+services:
+  mariadb:
+    image: mariadb:11.4
+    container_name: bank-mariadb
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpw
+      MARIADB_DATABASE: bankdb
+      MARIADB_USER: bank
+      MARIADB_PASSWORD: bankpw
+      TZ: Asia/Seoul
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    ports:
+      - "3306:3306"
+    volumes:
+      - bank-data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+volumes:
+  bank-data:
